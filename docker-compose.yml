@@ -4,17 +4,17 @@ services:
   deepwiki:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-appengine
     ports:
-      - "${PORT:-8001}:${PORT:-8001}"  # API port
+      - "8001:8001"  # API port
       - "3000:3000"  # Next.js port
     env_file:
       - .env
     environment:
-      - PORT=${PORT:-8001}
+      - PORT=3000
       - NODE_ENV=production
-      - SERVER_BASE_URL=http://localhost:${PORT:-8001}
-      - NEXT_PUBLIC_SERVER_BASE_URL=http://localhost:${PORT:-8001}
+      - SERVER_BASE_URL=http://localhost:8001
+      - NEXT_PUBLIC_SERVER_BASE_URL=http://localhost:8001
     volumes:
       - ~/.adalflow:/root/.adalflow  # Persist repository and embedding data
     # Resource limits for docker-compose up (not Swarm mode)
@@ -22,7 +22,7 @@ services:
     mem_reservation: 2g
     # Health check configuration
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${PORT:-8001}/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
       interval: 60s
       timeout: 10s
       retries: 3
